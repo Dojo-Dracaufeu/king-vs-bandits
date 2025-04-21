@@ -1,5 +1,6 @@
 // Game configuration
-const socket = new WebSocket('wss://game-server.king-vs-bandits.glitch.me');
+// Replace your WebSocket URL with:
+const socket = new WebSocket('wss://ws.postman-echo.com/raw');
 
 // ADD THESE LINES:
 console.log("Attempting WebSocket connection...");
