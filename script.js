@@ -1,5 +1,5 @@
 // Game configuration
-const socket = new WebSocket('wss://https://zany-rotary-phone-x5xqx7xvprpg2prgx.github.dev/-8080.preview.app.github.dev');
+const WS_SERVER = "wss://zany-rotary-phone-x5xqx7xvprpg2prgx.github.dev";
 const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const suits = ["♠", "♥", "♦", "♣"];
 
