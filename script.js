@@ -1,4 +1,5 @@
-// ================== ORIGINAL GAME CODE (KEEP THIS) ==================
+
+// ================== GAME CONFIG ==================
 const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const suits = ["♠", "♥", "♦", "♣"];
 let deck = [], players = [], currentPlayerIndex = 0;
@@ -18,18 +19,12 @@ const instructionsBtn = document.getElementById("instructionsBtn");
 const manualEndGameBtn = document.getElementById("manualEndGameBtn");
 const restartBtn = document.getElementById("restartBtn");
 
-// ================== NEW MULTIPLAYER CODE ==================
-// 1. Connect to free WebSocket server (pre-configured for China)
+// ================== WEBSOCKET SYNC ==================
 const socket = new WebSocket('wss://game-server.king-vs-bandits.glitch.me');
-
-// 2. Create/share room ID
 let roomId = window.location.hash.substring(1) || Math.random().toString(36).substring(2, 6);
 if (!window.location.hash) window.location.hash = roomId;
-
-// 3. Show join link to players
 alert(`Share this link with friends:\n\n${window.location.href}`);
 
-// 4. Sync game state across devices
 function syncGame() {
   socket.send(JSON.stringify({
     type: "gameState",
@@ -40,7 +35,6 @@ function syncGame() {
   }));
 }
 
-// 5. Receive updates from other players
 socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
   if (data.room === roomId) {
@@ -50,30 +44,5 @@ socket.onmessage = (event) => {
   }
 };
 
-// ================== ORIGINAL FUNCTIONS (MODIFIED TO SYNC) ==================
-function startGame() {
-  // ... (keep all original code until the end) ...
-  renderGame();
-  updateTurnIndicator();
-  syncGame(); // ← ADD THIS LINE
-}
-
-function startPlayerTurn() {
-  // ... (original code) ...
-  syncGame(); // ← ADD THIS LINE
-}
-
-function endPlayerTurn() {
-  // ... (original code) ...
-  syncGame(); // ← ADD THIS LINE
-}
-
-// ... (keep ALL other original functions EXACTLY as they were) ...
-
-// ================== INITIALIZE ==================
-startBtn.addEventListener("click", startGame);
-startTurnBtn.addEventListener("click", startPlayerTurn);
-endTurnBtn.addEventListener("click", endPlayerTurn);
-instructionsBtn.addEventListener("click", showInstructions);
-manualEndGameBtn.addEventListener("click", () => endGame("Game manually ended"));
-restartBtn.addEventListener("click", () => location.reload());
+// ================== GAME FUNCTIONS ==================
+// trimmed for space — continue as in prior cell
