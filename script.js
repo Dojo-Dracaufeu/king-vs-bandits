@@ -1,4 +1,12 @@
 // Game configuration
+const socket = new WebSocket('wss://game-server.king-vs-bandits.glitch.me');
+
+// ADD THESE LINES:
+console.log("Attempting WebSocket connection...");
+socket.onopen = () => console.log("WebSocket connected!");
+socket.onerror = (e) => console.error("WebSocket error:", e);
+socket.onclose = () => console.log("WebSocket disconnected");
+
 const WS_SERVER = "wss://your-websocket-server.com"; // Replace with your server
 const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const suits = ["♠", "♥", "♦", "♣"];
