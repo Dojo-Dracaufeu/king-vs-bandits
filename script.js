@@ -1,48 +1,133 @@
-
-// ================== GAME CONFIG ==================
+// Game configuration
+const WS_SERVER = "wss://your-websocket-server.com"; // Replace with your server
 const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const suits = ["♠", "♥", "♦", "♣"];
+
+// Game state
+let socket, playerId, roomCode, currentPlayer, playerRole;
 let deck = [], players = [], currentPlayerIndex = 0;
-let gameStarted = false, gameEnded = false, currentPlayer;
-let kingHasPeeked = false, bigBrotherHasSwapped = false;
-let turnActive = false, consecutivePasses = 0, actionTaken = false, swapInProgress = false;
+let gameStarted = false, gameEnded = false, turnActive = false;
 
 // DOM elements
-const startBtn = document.getElementById("startBtn");
-const startTurnBtn = document.getElementById("startTurnBtn");
-const endTurnBtn = document.getElementById("endTurnBtn");
-const playersArea = document.getElementById("players-area");
-const actionArea = document.getElementById("action-area");
-const logArea = document.getElementById("log-area");
-const deckCount = document.getElementById("deckCount");
-const instructionsBtn = document.getElementById("instructionsBtn");
-const manualEndGameBtn = document.getElementById("manualEndGameBtn");
-const restartBtn = document.getElementById("restartBtn");
+const loginScreen = document.getElementById("login-screen");
+const gameContainer = document.getElementById("game-container");
+const playerNameInput = document.getElementById("playerName");
+const roomCodeInput = document.getElementById("roomCode");
+const joinBtn = document.getElementById("joinBtn");
+const yourRoleSpan = document.getElementById("your-role");
 
-// ================== WEBSOCKET SYNC ==================
-const socket = new WebSocket('wss://game-server.king-vs-bandits.glitch.me');
-let roomId = window.location.hash.substring(1) || Math.random().toString(36).substring(2, 6);
-if (!window.location.hash) window.location.hash = roomId;
-alert(`Share this link with friends:\n\n${window.location.href}`);
+// Initialize
+joinBtn.addEventListener("click", joinGame);
 
-function syncGame() {
+async function joinGame() {
+  const name = playerNameInput.value.trim();
+  if (!name) return alert("Please enter your name");
+  
+  roomCode = roomCodeInput.value.trim() || generateRoomCode();
+  playerId = generateId();
+  
+  // Connect to WebSocket
+  socket = new WebSocket(`${WS_SERVER}?room=${roomCode}&player=${playerId}&name=${encodeURIComponent(name)}`);
+  
+  socket.onopen = () => {
+    loginScreen.style.display = "none";
+    gameContainer.style.display = "flex";
+    addToLog(`Connected to room: ${roomCode}`, "system");
+  };
+  
+  socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    handleMessage(data);
+  };
+}
+
+function handleMessage(data) {
+  switch (data.type) {
+    case "roleAssignment":
+      playerRole = data.role;
+      yourRoleSpan.textContent = playerRole;
+      addToLog(`You are the ${playerRole}`, "system");
+      break;
+      
+    case "gameState":
+      updateGameState(data.state);
+      break;
+      
+    case "startTurn":
+      startPlayerTurn();
+      break;
+      
+    case "actionResult":
+      handleActionResult(data);
+      break;
+      
+    case "gameEnd":
+      endGame(data.message);
+      break;
+      
+    case "log":
+      addToLog(data.message, data.logType || "system");
+      break;
+  }
+}
+
+function updateGameState(state) {
+  deck = state.deck;
+  players = state.players;
+  currentPlayerIndex = state.currentPlayerIndex;
+  gameStarted = state.gameStarted;
+  gameEnded = state.gameEnded;
+  
+  updateDeckCount();
+  renderGame();
+  updateTurnIndicator();
+}
+
+function startGame() {
   socket.send(JSON.stringify({
-    type: "gameState",
-    room: roomId,
-    players: players,
-    currentPlayerIndex: currentPlayerIndex,
-    deckCount: deck.length
+    type: "startGame",
+    room: roomCode
   }));
 }
 
-socket.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  if (data.room === roomId) {
-    players = data.players;
-    currentPlayerIndex = data.currentPlayerIndex;
-    renderGame();
-  }
-};
+function startPlayerTurn() {
+  if (players[currentPlayerIndex].id !== playerId) return;
+  
+  turnActive = true;
+  actionArea.style.display = "block";
+  startTurnBtn.disabled = true;
+  endTurnBtn.disabled = false;
+  
+  showTurnActions();
+}
 
-// ================== GAME FUNCTIONS ==================
-// trimmed for space — continue as in prior cell
+function endPlayerTurn() {
+  socket.send(JSON.stringify({
+    type: "endTurn",
+    room: roomCode,
+    playerId: playerId
+  }));
+}
+
+function performAction(action, target) {
+  socket.send(JSON.stringify({
+    type: "playerAction",
+    room: roomCode,
+    playerId: playerId,
+    action: action,
+    target: target
+  }));
+}
+
+// Helper functions
+function generateRoomCode() {
+  return Math.random().toString(36).substr(2, 6).toUpperCase();
+}
+
+function generateId() {
+  return 'xxxx-xxxx-xxxx'.replace(/[x]/g, () => 
+    (Math.random() * 16 | 0).toString(16));
+}
+
+// Your existing rendering and game logic functions (renderGame, addToLog, etc.)
+// Keep all the same but replace direct state modifications with performAction() calls
