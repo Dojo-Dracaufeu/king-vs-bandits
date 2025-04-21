@@ -1,5 +1,5 @@
 // Game configuration
-const WS_SERVER = "wss://your-websocket-server.com"; // Replace with your server
+const socket = new WebSocket('wss://your-codespace-url-8080.preview.app.github.dev');
 const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const suits = ["♠", "♥", "♦", "♣"];
 
