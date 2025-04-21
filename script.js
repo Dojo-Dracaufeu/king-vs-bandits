@@ -1,5 +1,5 @@
 // Game configuration
-const WS_SERVER = "wss://zany-rotary-phone-x5xqx7xvprpg2prgx.github.dev";
+const socket = new WebSocket('wss://multiplayer-websockets-example.glitch.me');
 const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const suits = ["♠", "♥", "♦", "♣"];
 
