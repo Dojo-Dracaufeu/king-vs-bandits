@@ -25,7 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!window.location.hash) window.location.hash = roomCode;
 
-    socket = new WebSocket(\`wss://multiplayer-websockets-example.glitch.me?room=\${roomCode}&player=\${playerId}&name=\${encodeURIComponent(name)}\`);
+    // In script.js, REPLACE the WebSocket line with:
+const socket = new WebSocket('wss://ws.postman-echo.com/raw');
+
+    socket.onopen = () => {
+  socket.send(JSON.stringify({
+    type: "join",
+    room: window.location.hash.substr(1) || "default",
+    name: "Player" + Math.floor(Math.random()*1000)
+  }));
+};
 
     socket.onopen = () => {
       console.log("Connected to room:", roomCode);
