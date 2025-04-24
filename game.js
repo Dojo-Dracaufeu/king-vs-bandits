@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function initConnection(roomId, name) {
-    ws = new WebSocket(`ws://${window.location.hostname}:8080`);
+    ws = new WebSocket('wss://your-project-name.glitch.me');
 
     ws.onopen = () => {
       ws.send(JSON.stringify({
