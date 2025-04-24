@@ -1,43 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>King vs Bandits - Multiplayer</title>
+  <title>King vs Bandits</title>
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-mobile.css" media="(max-width: 768px)">
 </head>
 <body>
-  <div id="login-screen">
-    <div class="login-box">
-      <h2>Join Game</h2>
-      <input type="text" id="playerName" placeholder="Your Name">
-      <input type="text" id="roomCode" placeholder="Room Code (leave empty for new)">
-      <button id="joinBtn">Join</button>
+  <div id="game-container">
+    <header>
+      <h1>King vs Bandits</h1>
+      <div id="player-info"></div>
+    </header>
+
+    <div id="game-board">
+      <div id="players-area"></div>
+      
+      <div id="controls-area">
+        <div class="action-buttons">
+          <button id="startBtn">Start Game</button>
+          <div id="action-area"></div>
+        </div>
+      </div>
+      
+      <div id="log-area"></div>
     </div>
   </div>
 
-  <div id="game-container" style="display:none;">
-    <!-- Your existing game container content -->
-    <button class="instructions-btn" id="instructionsBtn">?</button>
-    <h1>King vs Bandits</h1>
-    <div class="deck-count" id="deckCount"></div>
-    <div id="player-info">You are: <span id="your-role">?</span></div>
-    <div id="extra-controls">
-      <button id="manualEndGameBtn" disabled>End Game</button>
+  <!-- Modals -->
+  <div id="playerSelectModal" class="modal">
+    <div class="modal-content">
+      <h3>Select a Player</h3>
+      <div id="playerSelectList"></div>
+      <button id="cancelSelectBtn" style="margin-top: 15px;">Cancel</button>
     </div>
-    
-    <div id="players-area"></div>
-    
-    <div id="controls-area">
-      <button id="startTurnBtn" disabled>Start Turn</button>
-      <button id="endTurnBtn" disabled>End Turn</button>
-    </div>
-    
-    <div id="action-area"></div>
-    
-    <div id="log-area"></div>
   </div>
 
-  <script src="script.js"></script>
+  <div id="peekResultModal" class="modal">
+    <div class="modal-content">
+      <h3>Peek Result</h3>
+      <div id="peekResultContent"></div>
+      <button id="closePeekBtn" style="margin-top: 15px;">Close</button>
+    </div>
+  </div>
+
+  <div id="gameEndModal" class="modal">
+    <div class="modal-content">
+      <h3 id="gameEndTitle">Game Over</h3>
+      <div id="gameEndContent"></div>
+      <button id="newGameBtn" style="margin-top: 15px;">Close</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
 </body>
 </html>
