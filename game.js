@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function initConnection(roomId, name) {
-    ws = new WebSocket('wss://your-project-name.glitch.me');
+    ws = new WebSocket('wss://shore-gaudy-brace.glitch.me');
 
     ws.onopen = () => {
       ws.send(JSON.stringify({
