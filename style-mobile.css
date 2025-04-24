@@ -1,0 +1,164 @@
+/* style-mobile.css - Portrait Mobile Optimization */
+:root {
+  --mobile-font-scale: 0.85;
+}
+
+/* Portrait Mobile Only */
+@media (max-width: 768px) {
+  body {
+    overflow: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  #game-container {
+    padding: 10px;
+    min-height: 100vh;
+  }
+
+  header {
+    flex-direction: column;
+    padding: 5px 0;
+  }
+
+  h1 {
+    font-size: calc(1.5rem * var(--mobile-font-scale));
+    margin-bottom: 5px;
+  }
+
+  #player-info {
+    position: relative;
+    right: auto;
+    margin-top: 5px;
+    font-size: calc(0.9rem * var(--mobile-font-scale));
+  }
+
+  /* Compact 3+2 Player Grid */
+  #players-area {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 5px;
+    perspective: none;
+  }
+
+  .player {
+    width: 100%;
+    min-width: 0;
+    padding: 8px;
+    margin: 0;
+  }
+
+  /* Make cards smaller but still readable */
+  .card-container {
+    width: 50px;
+    height: 75px;
+    margin: 0 auto 5px;
+  }
+
+  .card-value {
+    font-size: calc(1.2rem * var(--mobile-font-scale));
+  }
+
+  .card-corner {
+    font-size: calc(0.7rem * var(--mobile-font-scale));
+  }
+
+  #controls-area {
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  .action-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  button {
+    min-width: 0;
+    width: 100%;
+    padding: 8px 4px;
+    font-size: calc(0.9rem * var(--mobile-font-scale));
+  }
+
+  #log-area {
+    height: 100px;
+    font-size: calc(0.85rem * var(--mobile-font-scale));
+    margin-top: 10px;
+  }
+
+  /* Modal adjustments */
+  .modal-content {
+    width: 95%;
+    padding: 15px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  /* Game End Modal */
+  #gameEndModal .modal-content {
+    padding: 15px;
+    max-width: 95%;
+  }
+
+  #gameEndTitle {
+    font-size: calc(1.5rem * var(--mobile-font-scale));
+    margin-bottom: 10px;
+  }
+
+  .winner-section h3 {
+    font-size: calc(1.2rem * var(--mobile-font-scale));
+  }
+
+  .end-game-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .player-card {
+    padding: 8px;
+  }
+
+  .player-card h4 {
+    font-size: calc(0.9rem * var(--mobile-font-scale));
+  }
+
+  .modal-card {
+    width: 60px;
+    height: 90px;
+    margin: 5px auto;
+  }
+
+  #newGameBtn {
+    margin: 15px auto 0;
+    padding: 8px 15px;
+    font-size: calc(0.9rem * var(--mobile-font-scale));
+  }
+}
+
+/* Fullscreen enhancements */
+:fullscreen {
+  background-color: var(--wood-light);
+  background-image: linear-gradient(to bottom, var(--wood-light), var(--wood-dark));
+}
+
+:fullscreen #game-container {
+  max-width: 100%;
+  padding: 10px;
+}
+
+:fullscreen #players-area {
+  max-height: none;
+}
+
+/* Prevent zooming on mobile */
+html {
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+input, textarea, select {
+  font-size: 16px; /* Prevent iOS zoom */
+}
