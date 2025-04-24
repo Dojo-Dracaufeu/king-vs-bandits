@@ -5,15 +5,26 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// Add CORS middleware
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-const wss = new WebSocket.Server({ server });
-const rooms = {};
+// Updated WebSocket server configuration with path
+const wss = new WebSocket.Server({ 
+  server,
+  path: "/ws" // Add specific WebSocket path
+});
 
+const rooms = {};
 const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const suits = ["♠", "♥", "♦", "♣"];
 
@@ -56,7 +67,15 @@ function createRoom(roomId) {
   return rooms[roomId];
 }
 
-wss.on('connection', (ws) => {
+// Modified WebSocket connection handler with origin validation
+wss.on('connection', (ws, req) => {
+  // Verify origin if you want additional security
+  const origin = req.headers.origin;
+  if (origin && !origin.includes("github.io")) {
+    console.log(`Rejected connection from origin: ${origin}`);
+    return ws.close();
+  }
+
   const playerId = Math.random().toString(36).substr(2, 9);
   
   ws.send(JSON.stringify({
@@ -103,6 +122,28 @@ wss.on('connection', (ws) => {
     }
   });
 });
+
+// ... [Keep all your existing functions exactly as they are below this point]
+// This includes:
+// - handleRoomJoin()
+// - handleStartGame()
+// - handlePlayerAction()
+// - allActionsUsed()
+// - handleSpecialSwapAction()
+// - handleSwapAction()
+// - handleDrawAction()
+// - handlePeekAction()
+// - handlePassAction()
+// - advanceTurn()
+// - endGame()
+// - resetGameState()
+// - broadcastRoomState()
+// - broadcastToRoom()
+// - broadcastLog()
+// - handleGetPlayers()
+
+// Make sure to keep all these functions exactly as you have them in your current file
+// The only changes we made were at the top of the file for WebSocket and CORS configuration
 
 function handleRoomJoin(ws, playerId, data) {
   const { roomId, playerName } = data;
