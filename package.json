@@ -1,8 +1,21 @@
+
 {
+  "name": "king-vs-bandits",
+  "version": "1.0.0",
+  "description": "Multiplayer card game server",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "watch": "nodemon server.js"
   },
   "engines": {
     "node": "16.x"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "ws": "^8.2.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
