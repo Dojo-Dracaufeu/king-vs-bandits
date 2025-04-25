@@ -3,7 +3,7 @@ const WebSocket = require('ws');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 1988;
 
 // Add CORS middleware
 app.use((req, res, next) => {
@@ -69,9 +69,10 @@ function createRoom(roomId) {
 
 // Modified WebSocket connection handler with origin validation
 wss.on('connection', (ws, req) => {
-  // Verify origin if you want additional security
   const origin = req.headers.origin;
-  if (origin && !origin.includes("github.io")) {
+  
+  // Allow connections from your Glitch domain and local development
+  if (origin && !origin.includes("glitch.me") && !origin.includes("localhost")) {
     console.log(`Rejected connection from origin: ${origin}`);
     return ws.close();
   }
