@@ -111,13 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function initConnection(roomId, name) {
-    ws = new WebSocket('wss://shore-gaudy-brace.glitch.me');
-
-    // Add error handling:
-ws.onerror = (error) => {
-  console.error('WebSocket Error:', error);
-  alert('Failed to connect to game server. Please refresh and try again.');
-};
+    ws = new WebSocket('wss://shore-gaudy-brace.glitch.me/ws');
 
     ws.onopen = () => {
       ws.send(JSON.stringify({
